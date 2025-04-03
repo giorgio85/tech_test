@@ -35,6 +35,6 @@ ukio-*.tar
 npm-debug.log
 /assets/node_modules/
 
-.DS_Storepgdata/
-pgdata/
+.DS_Store
+
 pgdata/
