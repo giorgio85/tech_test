@@ -6,6 +6,7 @@ config :ukio, Ukio.Repo,
   password: "ukio_code_test",
   hostname: "localhost",
   database: "ukio_code_test",
+  port: String.to_integer(System.get_env("POSTGRES_PORT") || "5433"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

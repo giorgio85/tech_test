@@ -30,11 +30,24 @@ if config_env() == :prod do
 
   maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 
-  config :ukio, Ukio.Repo,
-    # ssl: true,
-    url: database_url,
-    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
-    socket_options: maybe_ipv6
+  # If DATABASE_URL is set, we use it for all database configuration
+  # Otherwise, allow individual configuration including custom port
+  if System.get_env("DATABASE_URL") do
+    config :ukio, Ukio.Repo,
+      # ssl: true,
+      url: database_url,
+      pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+      socket_options: maybe_ipv6
+  else
+    config :ukio, Ukio.Repo,
+      username: System.get_env("POSTGRES_USER") || "ukio_code_test",
+      password: System.get_env("POSTGRES_PASSWORD") || "ukio_code_test",
+      hostname: System.get_env("POSTGRES_HOST") || "localhost",
+      database: System.get_env("POSTGRES_DB") || "ukio_code_test",
+      port: String.to_integer(System.get_env("POSTGRES_PORT") || "5433"),
+      pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+      socket_options: maybe_ipv6
+  end
 
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you
