@@ -79,6 +79,10 @@ We have two different tasks here:
     * The deposit is a full monthly rent
     * Utilities are not a fixed amount and are linked to the apartments' square meters.
 
+## Giorgio's Notes:
+By running `mix test test/ukio_web/controllers/booking_controller_test.exs` we can see the tests about the 2 requirements.
+Added also some tests on `mix test test/ukio/apartments_test.exs`
+
 ### What we look for
 We've tried to create a simple test but, also, something that lets us know more about you. Some points that could help you:
 * Feel free to change anything you think must/can be changed: variable names, code structure, etc.
