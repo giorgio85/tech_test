@@ -24,3 +24,12 @@ Ukio.Repo.insert!(%Ukio.Apartments.Apartment{
   address: "Carrer de Granados 45",
   square_meters: 89
 })
+
+Ukio.Repo.insert!(%Ukio.Apartments.Apartment{
+  zip_code: "08007",
+  name: "CAPITAN",
+  monthly_price: 195_000,
+  address: "Carrer de Granados 45",
+  square_meters: 89,
+  market: "Mars"
+})
