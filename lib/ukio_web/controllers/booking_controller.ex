@@ -8,13 +8,16 @@ defmodule UkioWeb.BookingController do
   action_fallback UkioWeb.FallbackController
 
   def create(conn, %{"booking" => booking_params}) do
-    IO.puts("Creating a new booking with the following params:")
-    IO.inspect(%{booking_params: booking_params})
-    :timer.sleep(10000)
-    with {:ok, %Booking{} = booking} <- BookingCreator.create(booking_params) do
-      conn
-      |> put_status(:created)
-      |> render(:show, booking: booking)
+    case BookingCreator.create(booking_params) do
+      {:ok, booking} ->
+        conn
+        |> put_status(:created)
+        |> json(booking)
+
+      {:error, error_message} ->
+        conn
+        |> put_status(:unauthorized)
+        |> json(%{error: error_message})
     end
   end
 
