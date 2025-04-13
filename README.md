@@ -1,3 +1,8 @@
+## Giorgio's Notes:
+* By running `mix test test/ukio_web/controllers/booking_controller_test.exs` we can see the tests about the 2 requirements.
+* Added also some tests on `mix test test/ukio/apartments_test.exs`
+* Also added the GET /api/bookings so we can check the bookings inserted http://localhost:4000/api/bookings
+
 # Ukio's coding test
 
 Welcome! First of all, thanks for your interest in being part of [Ukio's mission](https://ukio.com/about-us)! Here you'll find all the instructions to set up the environment and the requirements for the exercise.
@@ -78,10 +83,6 @@ We have two different tasks here:
 2. Furthermore, as we're expanding, we've discovered that not all markets work in the same way. Our next market, "Mars", has different deposit and utilities conditions:
     * The deposit is a full monthly rent
     * Utilities are not a fixed amount and are linked to the apartments' square meters.
-
-## Giorgio's Notes:
-By running `mix test test/ukio_web/controllers/booking_controller_test.exs` we can see the tests about the 2 requirements.
-Added also some tests on `mix test test/ukio/apartments_test.exs`
 
 ### What we look for
 We've tried to create a simple test but, also, something that lets us know more about you. Some points that could help you:
