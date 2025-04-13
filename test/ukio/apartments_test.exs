@@ -165,5 +165,50 @@ defmodule Ukio.ApartmentsTest do
       booking = booking_fixture()
       assert %Ecto.Changeset{} = Apartments.change_booking(booking)
     end
+
+    test "validate_availability/3 ensures overlapping bookings are not allowed", %{apartment: apartment} do
+      # Create an existing booking
+      valid_attrs = %{
+        apartment_id: apartment.id,
+        check_in: ~D[2025-03-26],
+        check_out: ~D[2025-04-30],
+        deposit: 100_000,
+        monthly_rent: 250_000,
+        utilities: 20000
+      }
+
+      assert {:ok, %Booking{} = booking} = Apartments.create_booking(valid_attrs)
+      assert booking.apartment_id == apartment.id
+      assert booking.check_in == ~D[2025-03-26]
+      assert booking.check_out == ~D[2025-04-30]
+
+      # Attempt to create a new booking with overlapping dates
+      overlapping_attrs = %{
+        apartment_id: apartment.id,
+        check_in: ~D[2025-03-28],
+        check_out: ~D[2025-05-01],
+        deposit: 100_000,
+        monthly_rent: 250_000,
+        utilities: 20000
+      }
+
+      assert {:error, "The apartment is already booked for the given dates: 2025-03-28 to 2025-05-01"} =
+        Apartments.create_booking(overlapping_attrs)
+
+      # Attempt to create a new booking with non-overlapping dates
+      non_overlapping_attrs = %{
+        apartment_id: apartment.id,
+        check_in: ~D[2025-06-02],
+        check_out: ~D[2025-07-05],
+        deposit: 100_000,
+        monthly_rent: 250_000,
+        utilities: 20000
+      }
+
+      assert {:ok, %Booking{} = booking_valid} = Apartments.create_booking(non_overlapping_attrs)
+      assert booking_valid.apartment_id == apartment.id
+      assert booking_valid.check_in == ~D[2025-06-02]
+      assert booking_valid.check_out == ~D[2025-07-05]
+    end
   end
 end

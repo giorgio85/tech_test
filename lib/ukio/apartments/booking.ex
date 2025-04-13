@@ -3,6 +3,7 @@ defmodule Ukio.Apartments.Booking do
   import Ecto.Changeset
 
   alias Ukio.Apartments.Apartment
+  @derive {Jason.Encoder, only: [:id, :check_in, :check_out, :apartment_id, :inserted_at, :updated_at]}
 
   schema "bookings" do
     belongs_to(:apartment, Apartment)

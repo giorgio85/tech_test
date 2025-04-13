@@ -7,6 +7,7 @@ defmodule Ukio.Apartments do
   alias Ukio.Repo
 
   alias Ukio.Apartments.Apartment
+  alias Ukio.Bookings.Handlers.BookingCreator
 
   @doc """
   Returns the list of apartments.
@@ -146,9 +147,20 @@ defmodule Ukio.Apartments do
 
   """
   def create_booking(attrs \\ %{}) do
-    %Booking{}
-    |> Booking.changeset(attrs)
-    |> Repo.insert()
+    with {:ok, check_in} <- Map.fetch(attrs, :check_in),
+        {:ok, check_out} <- Map.fetch(attrs, :check_out),
+        {:ok, apartment_id} <- Map.fetch(attrs, :apartment_id),
+        :ok <- BookingCreator.validate_availability(apartment_id, check_in, check_out) do
+      %Booking{}
+      |> Booking.changeset(attrs)
+      |> Repo.insert()
+    else
+      {:error, :apartment_already_booked} ->
+        {:error, "The apartment is already booked for the given dates: #{attrs[:check_in]} to #{attrs[:check_out]}"}
+
+      error ->
+        error
+    end
   end
 
   @doc """
