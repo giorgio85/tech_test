@@ -12,9 +12,14 @@ defmodule UkioWeb.BookingController do
       {:ok, booking} ->
         conn
         |> put_status(:created)
-        |> json(booking)
+        |> render(:show, booking: booking)
 
-      {:error, error_message} ->
+      {:error, %Ecto.Changeset{} = changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{errors: Ecto.Changeset.traverse_errors(changeset, &translate_error/1)})
+
+      {:error, "The apartment is already booked for the given dates: " <> _message = error_message} ->
         conn
         |> put_status(:unauthorized)
         |> json(%{error: error_message})
@@ -31,4 +36,10 @@ defmodule UkioWeb.BookingController do
     render(conn, :index, bookings: bookings)
   end
 
+  defp translate_error({msg, opts}) do
+    # Default translation logic for changeset errors
+    Enum.reduce(opts, msg, fn {key, value}, acc ->
+      String.replace(acc, "%{#{key}}", to_string(value))
+    end)
+  end
 end

@@ -114,7 +114,7 @@ defmodule Ukio.ApartmentsTest do
       utilities: nil
     }
     setup do
-      %{apartment: apartment_fixture()}
+      %{apartment: apartment_fixture(), mars_apartment: mars_apartment_fixture()}
     end
 
     test "list_bookings/0 returns all bookings" do

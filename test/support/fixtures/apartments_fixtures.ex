@@ -23,6 +23,22 @@ defmodule Ukio.ApartmentsFixtures do
     apartment
   end
 
+  def mars_apartment_fixture(attrs \\ %{}) do
+    {:ok, apartment} =
+      attrs
+      |> Enum.into(%{
+        address: "some address",
+        monthly_price: 250_000,
+        name: "some name",
+        square_meters: 42,
+        zip_code: "some zip_code",
+        market: "Mars"
+      })
+      |> Ukio.Apartments.create_apartment()
+
+    apartment
+  end
+
   @doc """
   Generate a booking.
   """

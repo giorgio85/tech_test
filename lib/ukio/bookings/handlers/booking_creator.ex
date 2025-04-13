@@ -13,7 +13,10 @@ defmodule Ukio.Bookings.Handlers.BookingCreator do
     else
       {:error, :apartment_already_booked} ->
         {:error, "The apartment is already booked for the given dates: #{check_in} to #{check_out}"}
-    end
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:error, changeset}
+   end
   end
 
   def validate_availability(apartment_id, check_in, check_out) do
