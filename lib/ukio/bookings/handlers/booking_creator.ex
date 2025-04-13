@@ -40,13 +40,39 @@ defmodule Ukio.Bookings.Handlers.BookingCreator do
   defp ensure_date(nil), do: nil
 
   defp generate_booking_data(apartment, check_in, check_out) do
+    market = apartment.market || "default"
+    rules = Map.get(market_rules(), market, market_rules()["default"])
+
+    deposit =
+      case rules["deposit"] do
+        "monthly_rent" -> apartment.monthly_price
+        fixed_value when is_integer(fixed_value) -> fixed_value
+      end
+
+    utilities =
+      case rules["utilities"] do
+        value when is_integer(value) -> value
+        expression when is_binary(expression) ->
+          {result, _} = Code.eval_string(expression, square_meters: apartment.square_meters)
+          result
+      end
+
     %{
       apartment_id: apartment.id,
       check_in: check_in,
       check_out: check_out,
       monthly_rent: apartment.monthly_price,
-      utilities: 20_000,
-      deposit: 100_000
+      utilities: utilities,
+      deposit: deposit
     }
+  end
+
+  # Loading market rules from a JSON file
+  # This is a simple example. In a real-world application, we might want to
+  # load this data from a database or an external service.
+  defp market_rules do
+    "priv/market_rules.json"
+    |> File.read!()
+    |> Jason.decode!()
   end
 end

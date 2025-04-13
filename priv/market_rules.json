@@ -1,0 +1,18 @@
+{
+    "Mars": {
+      "deposit": "monthly_rent",
+      "utilities": "square_meters * 10"
+    },
+    "Earth": {
+      "deposit": 100000,
+      "utilities": 20000
+    },
+    "Venus": {
+      "deposit": "monthly_rent",
+      "utilities": "square_meters * 5"
+    },
+    "default": {
+      "deposit": 100000,
+      "utilities": 20000
+    }
+}
